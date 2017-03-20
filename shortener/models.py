@@ -1,5 +1,9 @@
 from django.db import models
 from .utils import code_generator, create_shortcode
+
+#from django.core.urlresolvers import reverse
+from django_hosts.resolvers import reverse
+
 # Create your models here.
 from kirr import settings
 
@@ -41,8 +45,16 @@ class KirrURL(models.Model):
 		if self.shortcode is None or self.shortcode == "":
 			self.shortcode = create_shortcode(self)
 		super(KirrURL, self).save(*args, **kwargs)
+
 	def __str__(self):
 		return str(self.url)
 
 	def __unicode__(self):
 		return str(self.url)
+
+	def get_short_url(self):
+		url_path = reverse("scode", kwargs={'shortcode':self.shortcode}, host='www', scheme='http')
+		return url_path
+
+
+

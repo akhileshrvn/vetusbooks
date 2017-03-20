@@ -25,7 +25,7 @@ SECRET_KEY = '5f1xr(9*m*1q$g0+81*r6u(vpjkczkj!i%rrnf!@jk@673-z5e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['tirr.com','www.tirr.com','www.kirr.co', 'kirr.co']
 
 
 # Application definition
@@ -38,8 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #third party
+    # 'django_hosts',
+
     #custom app
     'shortener',
+    'analytics',
 ]
 
 MIDDLEWARE = [
@@ -53,11 +57,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'kirr.urls'
+ROOT_HOSTCONF = 'kirr.hosts'
+DEFAULT_HOST = 'www'
+DEFAULT_REDIRECT_URL = 'http://www.tirr.com:8000'
+PARENT_HOST = "tirr.com:8000"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
