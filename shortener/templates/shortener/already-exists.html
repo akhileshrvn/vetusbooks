@@ -1,7 +1,29 @@
-<div style='align-text: center;color: red; width: 800px;margin:0 auto'>
+{% extends "base.html" %}
+
+{% block styles %}
+	<style type="text/css">
+    	body{
+    		background-color: #077478;
+    		background-image: url('https://s-media-cache-ak0.pinimg.com/originals/92/38/b0/9238b0509f07436e931f464061641511.jpg');
+    		background-size: cover;
+    	}
+	</style>
+{% endblock styles%}
+
+{% block title %}
+
+	{{ object.shortcode }}
+
+{% endblock title %}
+
+{% block content %}
+
+<div style='color:red;' class=''>
 	<h1>Already Exists!</h1>
 	<p>{{ object.url }}</p>
 	<p>Count : {{ object.clickevent.count }}</p>
-	<p><a href='{{ object.get_short_url }}'>{{ object.get_short_url }}</a> </p>
-	<a href="/">+ New</a>
+	<p><a class='btn btn-link' href='{{ object.get_short_url }}'>{{ object.get_short_url }}</a> </p>
+	<a class ='btn btn-default' href="/">+ New</a>
 </div>
+
+{% endblock content %}

@@ -1,11 +1,26 @@
+{% extends "base.html" %}
 
-<div style='width: 800px;margin:0 auto'>
-	<h1>
-		{{ title }}
-	</h1>
-	
-	<form method='POST' action='.'> {% csrf_token %}
-		{{ form.as_p }}
-		<input type='submit' value='Shorten!'>
-	</form>
-</div>
+{% block styles %}
+	<style type="text/css">
+    	body{
+    		background-color: #077478;
+    		background-image: url('https://upload.wikimedia.org/wikipedia/commons/9/9e/Caneel_Bay_Turtle_Bay_Beach_3.jpg');
+    		background-size: cover;
+    	}
+	</style>
+{% endblock styles%}
+
+{% block content %}
+
+<h1 class='cover-heading'>{{ title }}</h1>
+	<p class='lead'>Shorten that URL</p>
+<p class='lead'>
+	<div class = 'col-sm-6 col-sm-offset-3'>
+		<form method='POST' action='.'> {% csrf_token %}
+			{{ form.as_p }}
+			<input class='btn btn-primary' type='submit' value='Shorten!'>
+		</form>
+	</div>
+</p>
+
+{% endblock content %}
