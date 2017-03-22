@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>This is VetusBooks Home!</h1>
+	{% if user.is_authenticated %}
+		<h1>Welcome {{ user.username }}</h1>
+	{% else %}
+		<h1>You are not logged In!</h1>
+	{% endif %}
+{% endblock content %}

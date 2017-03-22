@@ -7,8 +7,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
-		context={}
-		return render(request,"registration/loginSuccess.html",context)
+		context={
+			"user" : request.user
+		}
+		return render(request,"vetusbooks/home.html",context)
 
 class LogoutView(View):
 	def get(self, request, *args, **kwargs):
@@ -32,7 +34,7 @@ class LoginView(View):
 	def get(self, request, *args, **kwargs):
 		current_user = request.user
 		if(current_user.is_authenticated()):
-			return HttpResponseRedirect("/loggedIn")
+			return HttpResponseRedirect("/")
 		else:
 			form = UserLoginForm()
 			context = {
@@ -52,8 +54,8 @@ class LoginView(View):
 			user = authenticate(username=username, password=password)
 			if user:
 				login(request,user)
-				return HttpResponseRedirect("/loggedIn")
-		return HttpResponseRedirect("/loginFailed")
+				return HttpResponseRedirect("/")
+		return HttpResponseRedirect("/")
 
 def register_view(request):
 	return render(request,"form.html",{})
