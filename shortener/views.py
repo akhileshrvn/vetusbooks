@@ -4,7 +4,6 @@ from django.views import View
 
 from analytics.models import ClickEvent
 from .forms import SubmitURLForm
-from .models import KirrURL
 # Create your views here.
 
 class HomeView(View):

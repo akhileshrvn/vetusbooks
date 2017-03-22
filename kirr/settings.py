@@ -31,6 +31,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'material',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     # 'django_hosts',
 
     #custom app
+    'vetusbooks',
     'shortener',
     'analytics',
 ]
@@ -61,6 +63,8 @@ ROOT_HOSTCONF = 'kirr.hosts'
 DEFAULT_HOST = 'www'
 DEFAULT_REDIRECT_URL = 'http://www.tirr.com:8000'
 PARENT_HOST = "tirr.com:8000"
+
+AUTH_USER_MODEL = 'vetusbooks.User'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
