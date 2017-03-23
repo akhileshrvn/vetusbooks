@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django import forms
 from django.views import View
 from django.contrib.auth import authenticate,login, logout
-from django.contrib.auth.hashers import make_password
 
 from .forms import UserLoginForm, ImageUploadForm
 from .util import getUserBooks
@@ -13,6 +12,7 @@ class HomeView(View):
 		form = UserLoginForm(request.GET)
 		img_form = ImageUploadForm()
 		context={
+			"title" : "Home",
 			"user" : request.user,
 			"form" : form,
 			"img_form" : img_form
@@ -23,7 +23,6 @@ class HomeView(View):
 	def post(self, request, *args, **kwargs):
 		form = UserLoginForm(request.POST)
 		context = {
-			"title" : "Log In!",
 			"form" : form
 		}
 		if form.is_valid():

@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 
+{% block title %}
+	Home
+{% endblock title %}
+
+{% block styles %}
+	
+{% endblock styles %}
+
 {% block content %}
 	<h1>This is VetusBooks Home!</h1>
 	{% if user.is_authenticated %}
 		<h1>Welcome {{ user.username }}</h1>
 		<form action="/upload_pic/" method="post" enctype="multipart/form-data">
 		{% csrf_token %}
-    	{{ img_form }}	
+    	{{ img_form }}
     	<input type="submit" value="Submit" />
 		</form>
 		{% if user_books %}
