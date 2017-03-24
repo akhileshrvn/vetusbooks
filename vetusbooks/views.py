@@ -93,8 +93,9 @@ class LoginView(View):
 def register_view(request):
 	return render(request,"form.html",{})
 
-def logout_view(request):
-	return render(request,"form.html",{})
+def test_view(request):
+
+	return render(request,"testing.html",{"form":UserLoginForm()})
 
 def upload_pic(request):
     if request.method == 'POST':

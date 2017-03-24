@@ -4,10 +4,9 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from shortener.views import URLRedirectView
-from vetusbooks.views import upload_pic, LogoutView, LoginView, LoginSuccessView, LoginFailureView,HomeView
+from vetusbooks.views import test_view, upload_pic, LogoutView, LoginView, LoginSuccessView, LoginFailureView,HomeView
 urlpatterns = [
-
-	url(r'^upload/$', upload_pic, name='upload'),
+	url(r'^testing/$', test_view, name='upload'),
 	url(r'^login/$', LoginView.as_view(), name='login'),
 	url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^admin/', admin.site.urls),
