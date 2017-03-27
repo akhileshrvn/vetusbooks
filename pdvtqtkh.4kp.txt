@@ -1,0 +1,56 @@
+﻿Merge remote-tracking branch 'origin/master'
+
+# Conflicts:
+#	db.sqlite3
+#	kirr/__pycache__/urls.cpython-34.pyc
+#	vetusbooks/__pycache__/forms.cpython-34.pyc
+#	vetusbooks/__pycache__/views.cpython-34.pyc
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 1 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   .gitignore
+#	modified:   db.sqlite3
+#	modified:   kirr/__pycache__/urls.cpython-34.pyc
+#	modified:   kirr/urls.py
+#	modified:   static/css/base.css
+#	new file:   static/css/bootstrap.css
+#	modified:   static/css/bootstrap.min.css
+#	deleted:    static/css/login.css
+#	new file:   static/js/bootstrap.js
+#	modified:   static/js/bootstrap.min.js
+#	new file:   static/js/jquery.js
+#	deleted:    static/js/jquery.min.js
+#	modified:   templates/base.html
+#	deleted:    vetusbooks/__pycache__/forms.cpython-34.pyc
+#	modified:   vetusbooks/__pycache__/models.cpython-34.pyc
+#	deleted:    vetusbooks/__pycache__/util.cpython-34.pyc
+#	modified:   vetusbooks/__pycache__/validators.cpython-34.pyc
+#	modified:   vetusbooks/__pycache__/views.cpython-34.pyc
+#	modified:   vetusbooks/forms.py
+#	modified:   vetusbooks/models.py
+#	deleted:    vetusbooks/templates/registration/login.html
+#	deleted:    vetusbooks/templates/registration/loginFailure.html
+#	deleted:    vetusbooks/templates/registration/loginSuccess.html
+#	deleted:    vetusbooks/templates/registration/logout.html
+#	new file:   vetusbooks/templates/registration/registration.html
+#	deleted:    vetusbooks/templates/registration/templogin.html
+#	modified:   vetusbooks/templates/vetusbooks/home.html
+#	new file:   vetusbooks/templates/vetusbooks/search.html
+#	modified:   vetusbooks/util.py
+#	modified:   vetusbooks/views.py
+#
+

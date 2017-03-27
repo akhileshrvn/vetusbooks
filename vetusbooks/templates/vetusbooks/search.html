@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Here are Your Books:</h2>
+		{% for book in search_result %}
+			<ul>
+				{{ book }}
+			</ul>
+		{% endfor %}
+{% endblock content %}

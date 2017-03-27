@@ -1,30 +1,63 @@
+
 from django.shortcuts import render
 from django import forms
 from django.views import View
-from django.contrib.auth import authenticate,login, logout
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import logout
+
+from django.utils.http import urlencode
 
 from .forms import UserLoginForm, ImageUploadForm
-from .util import getUserBooks
+from .util import getUserBooks, handleLogin
+from .models import Book,User
 from django.http import HttpResponseRedirect, HttpResponse
+
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
 		form = UserLoginForm(request.GET)
 		img_form = ImageUploadForm()
 		context={
-			"user" : request.user,
-			"form" : form,
-			"img_form" : img_form
+			"title" : "Home",
+			"img_form" : img_form,
+			"login_form" : form,
 		}
+		handleLogin(request, context, form)
 		if(request.user.is_authenticated):
 			context['user_books'] = getUserBooks(request.user)
 		return render(request,"vetusbooks/home.html",context)
 	def post(self, request, *args, **kwargs):
 		form = UserLoginForm(request.POST)
 		context = {
-			"title" : "Log In!",
-			"form" : form
+			"title" : "Home",
+			"login_form" : form
+		}
+		handleLogin(request, context, form)
+		return render(request,"vetusbooks/home.html",context)
+class LogoutView(View):
+	def get(self, request, *args, **kwargs):
+		logout(request)
+		context={}
+		return HttpResponseRedirect("/")
+
+class RegistrationView(View):
+	def get(self, request, *args, **kwargs):
+		current_user = request.user
+		login_form = UserLoginForm(request.GET)
+		context = {
+			"title" : "Registration"
+		}
+		handleLogin(request, context, login_form)
+		if(current_user.is_authenticated()):
+			return HttpResponse("Already Logged In")
+		else:
+			register_form = RegistrationView()
+			context["register_form"] = register_form
+			return render(request,'registration/registration.html',context)
+	def post(self, request, *args, **kwargs):
+		form = register_form(request.POST)
+		context = {
+			"title" : "Register",
+			"regiser_form" : form
 		}
 		if form.is_valid():
 			username = request.POST['username']
@@ -34,32 +67,10 @@ class HomeView(View):
 				login(request,user)
 				return HttpResponseRedirect("/")
 			else:
-				form = UserLoginForm()
-				context = {
-					"form":form,
-					"login_error":"Failed!"
-				}
-				return render(request,"vetusbooks/home.html",context)
+				raise forms.ValidationError("You cannot post more than once every x minutes")
 			return HttpResponseRedirect("/")
 
 
-class LogoutView(View):
-	def get(self, request, *args, **kwargs):
-		logout(request)
-		context={}
-		return HttpResponseRedirect("/")
-
-class LoginSuccessView(View):
-	def get(self, request, *args, **kwargs):
-		context={}
-		print(request.user.is_authenticated())
-		if(request.user.is_authenticated()):
-			return render(request,"registration/loginSuccess.html",context)
-		return HttpResponseRedirect("/login")
-class LoginFailureView(View):
-	def get(self, request, *args, **kwargs):
-		context={}
-		return render(request,"registration/loginFailure.html",context)
 
 class LoginView(View):
 	def get(self, request, *args, **kwargs):
@@ -90,19 +101,24 @@ class LoginView(View):
 				raise forms.ValidationError("You cannot post more than once every x minutes")
 			return HttpResponseRedirect("/")
 
-def register_view(request):
-	return render(request,"form.html",{})
-
-def test_view(request):
-
-	return render(request,"testing.html",{"form":UserLoginForm()})
-
-def upload_pic(request):
-    if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            m = ExampleModel.objects.get(pk=course_id)
-            m.model_pic = form.cleaned_data['image']
-            m.save()
-            return HttpResponse('image upload success')
-    return HttpResponseForbidden('allowed only via POST')
+class SearchView(View):
+	def get(self, request, *args, **kwargs):
+		form = UserLoginForm(request.GET)
+		context = {
+			"title": "Search",
+			"login_form" : form
+		}
+		handleLogin(request, context, form)
+		srch_book_name = request.GET.get('srch-book')
+		if srch_book_name is None:
+			return render(request,"vetusbooks/home.html",context)
+		search_result = Book.objects.filter(title__contains=srch_book_name)
+		context['search_result'] = search_result
+		return render(request,"vetusbooks/search.html",context)
+	def post(self, request, *args, **kwargs):
+		form = UserLoginForm(request.POST)
+		context = {
+			"form" : form
+		}
+		handleLogin(request, context, form)
+		return HttpResponseRedirect("/")

@@ -16,7 +16,7 @@ class Book(models.Model):
 	seller = models.ForeignKey(User, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return self.title + " by " + self.author +" at " + str(self.price) + "rs."
+		return self.title + " by " + self.author +" for " + str(self.price) + "rs."
 
 class ExampleModel(models.Model):
 	model_pic = models.ImageField(upload_to = 'pic_folder/', default = 'pic_folder/None/no-img.jpg')
