@@ -11,6 +11,9 @@ from .util import getUserBooks, handleLogin
 from .models import Book,User
 from django.http import HttpResponseRedirect, HttpResponse
 
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
@@ -122,3 +125,14 @@ class SearchView(View):
 		}
 		handleLogin(request, context, form)
 		return HttpResponseRedirect("/")
+
+def simple_upload(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'vetusbooks/simple_upload.html', {
+            'uploaded_file_url': uploaded_file_url
+        })
+    return render(request, 'vetusbooks/simple_upload.html')
