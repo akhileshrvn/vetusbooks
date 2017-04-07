@@ -1,18 +1,50 @@
 {% extends "base.html" %}
-
-{% block content %}
-	{% if request.user.is_authenticated %}
-		<h1> You are already logged in</h1>
-	{% else %}
-		<form method = "POST" class="form">
-	        {% csrf_token %}
-	        <div class="form-group">
-	            {{ register_form.username }}
-	        </div>
-	        <div class="form-group">
-	            {{ register_form.password }}
-	        </div>
-	        <button type="submit" class="btn btn-default">Login</button>
-	    </form>
-	{% endif %}
-{% endblock content %}
+{% block content%}
+{{ register_form.non_field_errors }}
+<div class="col-sm-12 col-md-6 col-md-offset-3">
+<h1>Registration</h1>
+<form method="POST" id="regForm" class="form-horizontal">{% csrf_token %}
+<div class="fieldWrapper">
+    <label for="{{ register_form.first_name.id_for_label }}">First Name</label>
+    {{ register_form.first_name }}
+    {{ register_form.first_name.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.last_name.id_for_label }}">Last Name</label>
+    {{ register_form.last_name }}
+    {{ register_form.last_name.errors }}
+</div>
+<div class="fieldWrapper">
+	<label for="{{ register_form.username.id_for_label }}">Username:</label>
+    	{{ register_form.username }}
+    	{{ register_form.username.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.password1.id_for_label }}">Password:</label>
+    {{ register_form.password1 }}
+    {{ register_form.password1.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.password2.id_for_label }}">Confirm Password:</label>
+    {{ register_form.password2 }}
+    {{ register_form.password2.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.email.id_for_label }}">Email</label>
+    {{ register_form.email }}
+    {{ register_form.email.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.phone.id_for_label }}">Phone</label>
+    {{ register_form.phone }}
+    {{ register_form.phone.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.location.id_for_label }}">Location</label>
+    {{ register_form.location }}
+    {{ register_form.location.errors }}
+</div>
+<input type="Submit" value="Sign Up!"/>
+</form>
+</div>
+{% endblock content%}

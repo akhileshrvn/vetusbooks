@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content%}
+{{ mail_form.non_field_errors }}
+<form method="POST">{% csrf_token %}
+<div class="fieldWrapper">
+    {{ mail_form.subject.errors }}
+    <label for="{{ mail_form.subject.id_for_label }}">Email subject:</label>
+    {{ mail_form.subject }}
+</div>
+<div class="fieldWrapper">
+    {{ mail_form.message.errors }}
+    <label for="{{ mail_form.message.id_for_label }}">Your message:</label>
+    {{ mail_form.message }}
+</div>
+<div class="fieldWrapper">
+    {{ mail_form.sender.errors }}
+    <label for="{{ mail_form.sender.id_for_label }}">Your email address:</label>
+    {{ mail_form.sender }}
+</div>
+<div class="fieldWrapper">
+    {{ mail_form.cc_myself.errors }}
+    <label for="{{ mail_form.cc_myself.id_for_label }}">CC yourself?</label>
+    {{ mail_form.cc_myself }}
+</div>
+<input type="Submit" value="Send Mail!"/>
+</form>
+{% endblock content%}

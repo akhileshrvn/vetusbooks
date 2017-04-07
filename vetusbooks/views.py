@@ -2,11 +2,11 @@
 from django.shortcuts import render
 from django import forms
 from django.views import View
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 
 from django.utils.http import urlencode
 
-from .forms import UserLoginForm, ImageUploadForm
+from .forms import UserLoginForm, ImageUploadForm, RegistrationForm, ContactForm
 from .util import getUserBooks, handleLogin
 from .models import Book,User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+from django.core.mail import send_mail
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
@@ -53,14 +54,14 @@ class RegistrationView(View):
 		if(current_user.is_authenticated()):
 			return HttpResponse("Already Logged In")
 		else:
-			register_form = RegistrationView()
+			register_form = RegistrationForm()
 			context["register_form"] = register_form
 			return render(request,'registration/registration.html',context)
 	def post(self, request, *args, **kwargs):
 		form = register_form(request.POST)
 		context = {
 			"title" : "Register",
-			"regiser_form" : form
+			"register_form" : form
 		}
 		if form.is_valid():
 			username = request.POST['username']
@@ -136,3 +137,39 @@ def simple_upload(request):
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'vetusbooks/simple_upload.html')
+
+def sendMail(request):
+	if request.method == "POST":
+		mail_form = ContactForm(request.POST)
+		if mail_form.is_valid():
+			subject = mail_form.cleaned_data['subject']
+			message = mail_form.cleaned_data['message']
+			sender = mail_form.cleaned_data['sender']
+			cc_myself = mail_form.cleaned_data['cc_myself']
+			recipients = ['tgmukku@softpathtech.com']
+			if cc_myself:
+				recipients.append(sender)
+
+			send_mail(subject, message, sender, recipients)
+			return HttpResponseRedirect('/thanks/')
+	else:
+		mail_form = ContactForm()
+	return render(request, 'name.html', {'mail_form':mail_form})
+
+def register(request):
+	if request.method == "POST":
+		register_form = RegistrationForm(request.POST)
+		if(request.user.is_authenticated()):
+			HttpResponseRedirect("/")
+		if register_form.is_valid():
+			new_user = register_form.save()
+			username = register_form.cleaned_data['username']
+			password = register_form.cleaned_data['password1']
+			password2 = register_form.cleaned_data['password2']
+			user = authenticate(username=username, password=password)
+			print("UNAME",user)
+			# login(request, user)
+			return HttpResponse("User Created Successfully!")
+	else:
+		register_form = RegistrationForm()
+	return render(request, 'registration/registration.html', {'register_form' : register_form})
