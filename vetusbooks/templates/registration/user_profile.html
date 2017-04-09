@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1>Edit Profile</h1>
+  	<hr>
+	<div class="row">
+      <!-- left column -->
+      <div class="col-md-3">
+        <div class="text-center">
+          <img src="{{ request.user.avatar.url }}" class="avatar img-circle" alt="avatar" width="100px">
+          <h3>{{ request.user.username }}</h3>
+          
+        </div>
+      </div>
+      
+      <!-- edit form column -->
+      <div class="col-md-9 personal-info">
+        {% if False %}
+        <div class="alert alert-success alert-dismissable">
+          <a class="panel-close close" data-dismiss="alert">×</a> 
+          <i class="fa fa-coffee"></i>
+          {{ alert_message }} Success
+        </div>
+        {% endif %}
+
+        <h3>Personal info</h3>
+        
+        <form method="POST" class="form-horizontal" enctype="multipart/form-data" role="form">{% csrf_token %}
+          <div class="fieldWrapper form-group">
+            <label class="col-lg-3 control-label" for="{{ profile_form.username.id_for_label }}">Username:</label>
+            <div class="col-lg-8">
+              {{ profile_form.username }}
+            </div>
+            <div class="col-lg-8">
+            {{ profile_form.username.errors }}
+            </div>
+          </div>
+          <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">First name:</label>
+            <div class="col-lg-8">
+              {{ profile_form.first_name }}
+            </div>
+            <div class="col-lg-8">
+            {{ profile_form.first_name.errors }}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Last name:</label>
+            <div class="col-lg-8">
+              {{ profile_form.last_name }}
+            </div>
+            <div class="col-lg-8">
+            {{ profile_form.last_name.errors }}
+            </div>
+          </div>
+        </div>
+        <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-md-3 control-label">PhoneNumber:</label>
+            <div class="col-md-8">
+              {{ profile_form.phone}}
+              <!-- <input class="form-control" type="text" value="{{ profile_form.phone}}"> -->
+            </div>
+            <div class="col-lg-8">
+            {{ profile_form.phone.errors }}
+          </div>
+          </div>
+        </div>
+        <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-md-3 control-label">Location:</label>
+            <div class="col-md-8">
+              {{ profile_form.location}}
+              <!-- <input class="form-control" type="text" value="{{ profile_form.phone}}"> -->
+            </div>
+            <div class="col-lg-8">
+            {{ profile_form.location.errors }}
+          </div>
+          </div>
+        </div>
+        <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-md-3 control-label">Profile Pic:</label>
+            <div class="col-md-8">
+              {{ profile_form.avatar}}
+              <!-- <input class="form-control" type="text" value="{{ profile_form.phone}}"> -->
+            </div>
+            {{ profile_form.avatar.errors }}
+          </div>
+        </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input type="Submit" class="btn btn-primary" value="Save Changes">
+              <span></span>
+              <input type="button" class="btn btn-default" value="Cancel">
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+<hr>
+{% endblock content %}

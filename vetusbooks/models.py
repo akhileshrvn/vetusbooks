@@ -8,6 +8,7 @@ class User(AbstractUser):
 	phone = models.CharField(max_length=10, unique=True, validators=[validate_phone], blank=False)
 	location = models.CharField(max_length = 30, blank=True)
 	birth_date = models.DateField(null=True, blank=True)
+	avatar = models.ImageField(upload_to = 'avatar', default = 'avatar/avatar.jpg')
 
 class Book(models.Model):
 	title = models.CharField(max_length=100, blank=False)

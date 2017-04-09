@@ -6,7 +6,7 @@ from django.contrib.auth import logout, authenticate, login
 
 from django.utils.http import urlencode
 
-from .forms import UserLoginForm, ImageUploadForm, RegistrationForm, ContactForm
+from .forms import UserLoginForm, ImageUploadForm, RegistrationForm, ContactForm, UserProfileForm
 from .util import getUserBooks, handleLogin
 from .models import Book,User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -42,39 +42,6 @@ class LogoutView(View):
 		logout(request)
 		context={}
 		return HttpResponseRedirect("/")
-
-class RegistrationView(View):
-	def get(self, request, *args, **kwargs):
-		current_user = request.user
-		login_form = UserLoginForm(request.GET)
-		context = {
-			"title" : "Registration"
-		}
-		handleLogin(request, context, login_form)
-		if(current_user.is_authenticated()):
-			return HttpResponse("Already Logged In")
-		else:
-			register_form = RegistrationForm()
-			context["register_form"] = register_form
-			return render(request,'registration/registration.html',context)
-	def post(self, request, *args, **kwargs):
-		form = register_form(request.POST)
-		context = {
-			"title" : "Register",
-			"register_form" : form
-		}
-		if form.is_valid():
-			username = request.POST['username']
-			password = request.POST['password']
-			user = authenticate(username=username, password=password)
-			if user:
-				login(request,user)
-				return HttpResponseRedirect("/")
-			else:
-				raise forms.ValidationError("You cannot post more than once every x minutes")
-			return HttpResponseRedirect("/")
-
-
 
 class LoginView(View):
 	def get(self, request, *args, **kwargs):
@@ -138,38 +105,71 @@ def simple_upload(request):
         })
     return render(request, 'vetusbooks/simple_upload.html')
 
-def sendMail(request):
-	if request.method == "POST":
-		mail_form = ContactForm(request.POST)
-		if mail_form.is_valid():
-			subject = mail_form.cleaned_data['subject']
-			message = mail_form.cleaned_data['message']
-			sender = mail_form.cleaned_data['sender']
-			cc_myself = mail_form.cleaned_data['cc_myself']
-			recipients = ['tgmukku@softpathtech.com']
-			if cc_myself:
-				recipients.append(sender)
-
-			send_mail(subject, message, sender, recipients)
-			return HttpResponseRedirect('/thanks/')
-	else:
-		mail_form = ContactForm()
-	return render(request, 'name.html', {'mail_form':mail_form})
 
 def register(request):
+	context = {
+			"title": "Sign Up!",
+	}
+	if(request.user.is_authenticated):
+		return HttpResponseRedirect("/")
 	if request.method == "POST":
-		register_form = RegistrationForm(request.POST)
-		if(request.user.is_authenticated()):
-			HttpResponseRedirect("/")
+		register_form = RegistrationForm(request.POST, request.FILES)
 		if register_form.is_valid():
 			new_user = register_form.save()
+			print("USER AVATAR", new_user.avatar)
 			username = register_form.cleaned_data['username']
 			password = register_form.cleaned_data['password1']
 			password2 = register_form.cleaned_data['password2']
+
 			user = authenticate(username=username, password=password)
-			print("UNAME",user)
-			# login(request, user)
-			return HttpResponse("User Created Successfully!")
+			login(request, user)
+			return HttpResponseRedirect("/")
 	else:
 		register_form = RegistrationForm()
-	return render(request, 'registration/registration.html', {'register_form' : register_form})
+	context["register_form"] = register_form
+	return render(request, 'registration/registration.html', context)
+
+def user_profile(request):
+	context = {
+			"title": "Profile",
+	}
+	if(not request.user.is_authenticated()):
+		return HttpResponseRedirect("/")
+	if request.method == "POST":
+		profile_form = UserProfileForm(request.POST, request.FILES, instance = request.user)
+		if profile_form.is_valid():
+			print("Avatar" , profile_form.cleaned_data['avatar'])
+			new_user = profile_form.save()
+			print("Avatar 2", new_user.avatar)
+			context["alert_message"] = "Profile Updated Successfully!"
+			print("context updated")
+			return HttpResponseRedirect("/profile", context)
+	else:
+		print("Not Valid")
+		profile_form = UserProfileForm(instance=request.user)
+	context["profile_form"] = profile_form
+	return render(request, 'registration/user_profile.html', context)
+
+def user_books(request):
+	if(not request.user.is_authenticated()):
+		return HttpResponseRedirect("/")
+	else:
+		context = {
+			"title" : "My Books",
+			"user_books" : getUserBooks(request.user)
+		}
+
+	return render(request, 'vetusbooks/user_books.html', context)
+
+def sell_book(request):
+	if(not request.user.is_authenticated()):
+		return HttpResponseRedirect("/")
+	else:
+		context = {
+			"title" : "Sell Book",
+		}
+
+	return render(request, 'vetusbooks/sell_book.html', context)
+
+def testing(request):
+	return render(request, 'testing.html', {})

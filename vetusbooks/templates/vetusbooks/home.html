@@ -12,21 +12,7 @@
 	<h1>This is VetusBooks Home!</h1>
 	{% if user.is_authenticated %}
 		<h1>Welcome {{ user.username }}</h1>
-		<form action="/upload_pic/" method="post" enctype="multipart/form-data">
-		{% csrf_token %}
-    	{{ img_form }}
-    	<input type="submit" value="Submit" />
-		</form>
-		{% if user_books %}
-		<h2>Here are Your Books:</h2>
-			{% for book in user_books %}
-				<ul>
-					{{ book }}
-				</ul>
-			{% endfor %}
-		{% else %}
-			<h2>No Books Dude!</h2>
-		{% endif %}
+		<h2>This is Home Page Dude.</h2>
 	{% else %}
 		<h1>You are not logged In!</h1>
 	{% endif %}

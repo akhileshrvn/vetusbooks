@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
 {% block content%}
 {{ register_form.non_field_errors }}
 <div class="col-sm-12 col-md-6 col-md-offset-3">
 <h1>Registration</h1>
-<form method="POST" id="regForm" class="form-horizontal">{% csrf_token %}
+<form method="POST" enctype = "multipart/form-data" id="regForm" class="form-horizontal">{% csrf_token %}
 <div class="fieldWrapper">
     <label for="{{ register_form.first_name.id_for_label }}">First Name</label>
     {{ register_form.first_name }}
@@ -17,7 +22,9 @@
 <div class="fieldWrapper">
 	<label for="{{ register_form.username.id_for_label }}">Username:</label>
     	{{ register_form.username }}
+        <div class="sample">
     	{{ register_form.username.errors }}
+        </div>
 </div>
 <div class="fieldWrapper">
     <label for="{{ register_form.password1.id_for_label }}">Password:</label>
@@ -43,6 +50,11 @@
     <label for="{{ register_form.location.id_for_label }}">Location</label>
     {{ register_form.location }}
     {{ register_form.location.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.avatar.id_for_label }}">Profile Pic</label>
+    {{ register_form.avatar }}
+    {{ register_form.avatar.errors }}
 </div>
 <input type="Submit" value="Sign Up!"/>
 </form>

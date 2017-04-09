@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 {% load vb_filters %}
+{% block title%}
+	{{ title }}
+{% endblock title %}
+
 {% block content %}
-	<h2>Here are Your Books:</h2>
-		{% for book in search_result %}
+		<h2>Here are Your Books:</h2>
+		{% for book in user_books %}
 			{% if book.id|percent_four == 1 %}
 				<div class="row">
 			{% endif %}
-			<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="col-xs-3">
 				<div class="card" style="width: 20rem;">
 				  <img class="card-img-top" src="{{MEDIA_ROOT}}/media/book_sample.jpg" width="100%" alt="Card image cap">
 				  	<div class="card-block">
-				    	<h4 class="card-title">{{ book.title }}</h4>
+				    	<h4 class="card-title">{{ book.title }} | {{ book.id }}</h4>
 				    	<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 						<a href="#" class="btn btn-primary">{{ book.price }}</a>
 					</div>
@@ -19,5 +23,5 @@
 			{% if book.id|percent_four == 0 %}
 				</div>
 			{% endif %}
-	{% endfor %}
-{% endblock content %}
+		{% endfor %}
+{% endblock content%}
