@@ -1,23 +1,29 @@
 {% extends "base.html" %}
 {% load vb_filters %}
 {% block content %}
-	<h2>Here are Your Books:</h2>
+	<div class="row">
+		<h2>{{ search_result|length }} Books Found:</h2>
+	</div>
 		{% for book in search_result %}
-			{% if book.id|percent_four == 1 %}
-				<div class="row">
-			{% endif %}
-			<div class="col-md-3 col-sm-6 col-xs-12">
-				<div class="card" style="width: 20rem;">
-				  <img class="card-img-top" src="{{MEDIA_ROOT}}/media/book_sample.jpg" width="100%" alt="Card image cap">
-				  	<div class="card-block">
-				    	<h4 class="card-title">{{ book.title }}</h4>
-				    	<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn btn-primary">{{ book.price }}</a>
+		{% if forloop.counter0|percent_four == 3 %}
+			<div class="row">
+		{% endif %}
+			<div class="col-sm-3 col-lg-3 col-md-3">
+				<div class="thumbnail">
+					{% if book.thumbnail.name is None %}
+						<img class = "book_thumb" src="{{MEDIA_ROOT}}/media/photos/no_thumb.jpg" alt="Card image cap">
+					{% else %}
+				  		<img class="book_thumb" src="{{MEDIA_ROOT}}{{book.thumbnail.url}}" alt="Card image cap">
+				  	{% endif %}
+				  	<div class="caption">
+				  		<h4><a href="/book/{{book.id}}">{{ book.title }}</a></h4>
+				  		<h4>${{ book.price }}</h4>
+				    	<p class="card-text">{{ book.description }}</p>
 					</div>
 				</div>
 			</div>
-			{% if book.id|percent_four == 0 %}
-				</div>
-			{% endif %}
-	{% endfor %}
+		{% if forloop.counter0|percent_four == 3 %}
+		</div>
+		{% endif %}
+		{% endfor %}
 {% endblock content %}

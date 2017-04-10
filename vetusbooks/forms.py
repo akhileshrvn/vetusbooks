@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.core.files.storage import FileSystemStorage
 
-from vetusbooks.models import User
+from vetusbooks.models import User, Book
 
 class UserLoginForm(forms.Form):
     username = forms.CharField(max_length=50, required=True,
@@ -101,3 +101,28 @@ class ContactForm(forms.Form):
         if len(subject) < 5:
             raise forms.ValidationError("Length of subject must be greater than 5")
         return subject
+
+class SellBookForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SellBookForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+            'class': 'form-control'
+            })
+
+    class Meta:
+        model = Book
+        fields = {
+            'title', 'author', 'price', 'thumbnail','description',
+        }
+
+    def save(self, commit=True):
+        new_book = super(SellBookForm, self).save(commit=False)
+        new_book.title = self.cleaned_data['title']
+        new_book.author = self.cleaned_data['author']
+        new_book.price = self.cleaned_data['price']
+        new_book.thumbnail = self.cleaned_data['thumbnail']
+        new_book.description = self.cleaned_data['description']
+        # if commit:
+        #     new_user.save()
+        return new_book

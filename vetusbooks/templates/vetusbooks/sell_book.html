@@ -3,5 +3,69 @@
 	{{ title }}
 {% endblock title %}
 {% block content %}
+<!-- 'title', 'author', 'price', 'thumbnail','description', -->
 	<h2>Here You can sell a book</h2>
+	<form method="POST" class="form-horizontal" enctype="multipart/form-data" role="form">{% csrf_token %}
+          <div class="fieldWrapper form-group">
+            <label class="col-lg-3 control-label" for="{{ book_form.username.id_for_label }}">Title:</label>
+            <div class="col-lg-8">
+              {{ book_form.title }}
+            </div>
+            <div class="col-lg-8">
+            {{ book_form.title.errors }}
+            </div>
+          </div>
+          <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Author:</label>
+            <div class="col-lg-8">
+              {{ book_form.author }}
+            </div>
+            <div class="col-lg-8">
+            {{ book_form.author.errors }}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Price:</label>
+            <div class="col-lg-8">
+              {{ book_form.price }}
+            </div>
+            <div class="col-lg-8">
+            {{ book_form.price.errors }}
+            </div>
+          </div>
+        </div>
+        <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-md-3 control-label">Thumbnail:</label>
+            <div class="col-md-8">
+              {{ book_form.thumbnail}}
+              <!-- <input class="form-control" type="text" value="{{ book_form.phone}}"> -->
+            </div>
+            <div class="col-lg-8">
+            {{ book_form.thumbnail.errors }}
+          </div>
+          </div>
+        </div>
+        <div class="fieldWrapper">
+          <div class="form-group">
+            <label class="col-md-3 control-label">Description:</label>
+            <div class="col-md-8">
+              {{ book_form.description}}
+              <!-- <input class="form-control" type="text" value="{{ book_form.phone}}"> -->
+            </div>
+            <div class="col-lg-8">
+            {{ book_form.description.errors }}
+          </div>
+          </div>
+        </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input type="Submit" class="btn btn-primary" value="Save Changes">
+              <span></span>
+              <input type="button" class="btn btn-default" value="Cancel">
+            </div>
+          </div>
+        </form>
 {% endblock content %}

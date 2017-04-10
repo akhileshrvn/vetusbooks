@@ -6,7 +6,7 @@ from django.contrib.auth import logout, authenticate, login
 
 from django.utils.http import urlencode
 
-from .forms import UserLoginForm, ImageUploadForm, RegistrationForm, ContactForm, UserProfileForm
+from .forms import UserLoginForm, ImageUploadForm, RegistrationForm, ContactForm, UserProfileForm, SellBookForm
 from .util import getUserBooks, handleLogin
 from .models import Book,User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -15,26 +15,26 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from django.core.mail import send_mail
+import os
 
 class HomeView(View):
+
+	context={
+		"title" : "Home",
+		}
 	def get(self, request, *args, **kwargs):
+		context = self.context
 		form = UserLoginForm(request.GET)
 		img_form = ImageUploadForm()
-		context={
-			"title" : "Home",
-			"img_form" : img_form,
-			"login_form" : form,
-		}
+		context["login_form"] = form
+		context["random_books"] = Book.objects.all().order_by('?')[:8]
 		handleLogin(request, context, form)
-		if(request.user.is_authenticated):
-			context['user_books'] = getUserBooks(request.user)
 		return render(request,"vetusbooks/home.html",context)
 	def post(self, request, *args, **kwargs):
+		context = self.context
 		form = UserLoginForm(request.POST)
-		context = {
-			"title" : "Home",
-			"login_form" : form
-		}
+		context["login_form"] = form
+		context["random_books"] = Book.objects.all().order_by('?')[:8]
 		handleLogin(request, context, form)
 		return render(request,"vetusbooks/home.html",context)
 class LogoutView(View):
@@ -85,6 +85,7 @@ class SearchView(View):
 			return render(request,"vetusbooks/home.html",context)
 		search_result = Book.objects.filter(title__contains=srch_book_name)
 		context['search_result'] = search_result
+		context['search_length'] = len(search_result)
 		return render(request,"vetusbooks/search.html",context)
 	def post(self, request, *args, **kwargs):
 		form = UserLoginForm(request.POST)
@@ -142,8 +143,9 @@ def user_profile(request):
 			new_user = profile_form.save()
 			print("Avatar 2", new_user.avatar)
 			context["alert_message"] = "Profile Updated Successfully!"
+			context["profile_form"] = profile_form
 			print("context updated")
-			return HttpResponseRedirect("/profile", context)
+			return render(request, "registration/user_profile.html", context)
 	else:
 		print("Not Valid")
 		profile_form = UserProfileForm(instance=request.user)
@@ -162,14 +164,58 @@ def user_books(request):
 	return render(request, 'vetusbooks/user_books.html', context)
 
 def sell_book(request):
-	if(not request.user.is_authenticated()):
+	context = {
+		"title": "Sell a Book!",
+	}
+	if(not request.user.is_authenticated):
 		return HttpResponseRedirect("/")
+	if request.method == "POST":
+		book_form = SellBookForm(request.POST, request.FILES)
+		if book_form.is_valid():
+			new_book = book_form.save()
+			new_book.seller_id = request.user.id
+			new_book.save()
+			print("Book Saved Successfully")
+			context['alert_message'] = new_book.title + " Added Successfully!"
+			context['user_books'] = getUserBooks(request.user)
+			return render(request, 'vetusbooks/user_books.html', context)
 	else:
-		context = {
-			"title" : "Sell Book",
-		}
-
+		book_form = SellBookForm()
+	context["book_form"] = book_form
 	return render(request, 'vetusbooks/sell_book.html', context)
 
 def testing(request):
 	return render(request, 'testing.html', {})
+
+def show_book(request, book_id):
+	result_book = Book.objects.filter(id=book_id)
+	if not result_book:
+		return HttpResponseRedirect("/")
+	result_book = result_book[0]
+	context = {
+		"title":result_book.title,
+		"result_book": result_book,
+		"user" : request.user,
+	}
+	print(result_book)
+	return render(request, 'vetusbooks/show_book.html',context)
+
+def remove_book(request, book_id):
+	book = Book.objects.filter(id=book_id)
+	if not book:
+		return HttpResponseRedirect("/")
+	book = book[0]
+	user = request.user
+	context = {
+		"title":"Delete "+ book.title,
+		"book": book,
+		"user" : user
+	}
+	if(user.is_authenticated() and user.id == book.seller_id):
+		os.remove(book.thumbnail.path)
+		book.delete()
+		context["alert_message"] = book.title + " Deleted Successfully!"
+		context["user_books"] = getUserBooks(request.user)
+		return render(request, "vetusbooks/user_books.html", context)
+	else:
+		return HttpResponseRedirect("/")

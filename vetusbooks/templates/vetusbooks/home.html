@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load vb_filters %}
 {% block title %}
 	Home
 {% endblock title %}
@@ -9,11 +9,33 @@
 {% endblock styles %}
 
 {% block content %}
-	<h1>This is VetusBooks Home!</h1>
+	<!-- <h1>This is VetusBooks Home!</h1> -->
 	{% if user.is_authenticated %}
-		<h1>Welcome {{ user.username }}</h1>
-		<h2>This is Home Page Dude.</h2>
+		<h3>Recommend Books For You:</h3>
+		<!-- <h2>This is Home Page Dude.</h2> -->
 	{% else %}
 		<h1>You are not logged In!</h1>
 	{% endif %}
+	{% for book in random_books %}
+		{% if forloop.counter0|percent_four == 3 %}
+			<div class="row">
+		{% endif %}
+			<div class="col-sm-3 col-lg-3 col-md-3">
+				<div class="thumbnail">
+					{% if book.thumbnail.name is None %}
+						<img class = "book_thumb" src="{{MEDIA_ROOT}}/media/photos/no_thumb.jpg" alt="Card image cap">
+					{% else %}
+				  		<img class="book_thumb" src="{{MEDIA_ROOT}}{{book.thumbnail.url}}" alt="Card image cap">
+				  	{% endif %}
+				  	<div class="caption">
+				  		<h4><a href="/book/{{book.id}}">{{ book.title }}</a></h4>
+				  		<h4>${{ book.price }}</h4>
+				    	<p class="card-text">{{ book.description }}</p>
+					</div>
+				</div>
+			</div>
+		{% if forloop.counter0|percent_four == 3 %}
+		</div>
+		{% endif %}
+		{% endfor %}
 {% endblock content %}

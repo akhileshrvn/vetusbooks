@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}
+	{{ title }}
+{% endblock title%}
+{% block content %}
+	<div>
+		<h1>{{ result_book.title }}</h1>
+	</div>
+	<div>
+		<img src="{{ result_book.thumbnail.url }}" width="25%">
+		Hello World
+	</div>
+	<div>
+		{% if result_book.seller_id == user.id %}
+			<a href="/remove_book/{{ result_book.id }}">Remove Book</a> <a>|</a>
+			<a href="#">Edit Book</a>
+		{% endif %}
+	</div>
+{% endblock content %}

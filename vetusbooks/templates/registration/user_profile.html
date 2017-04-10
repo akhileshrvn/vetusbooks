@@ -19,11 +19,11 @@
       
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
-        {% if False %}
+        {% if alert_message %}
         <div class="alert alert-success alert-dismissable">
           <a class="panel-close close" data-dismiss="alert">×</a> 
           <i class="fa fa-coffee"></i>
-          {{ alert_message }} Success
+          {{ alert_message }}
         </div>
         {% endif %}
 
