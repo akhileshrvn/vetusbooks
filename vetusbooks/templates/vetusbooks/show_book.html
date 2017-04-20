@@ -4,11 +4,25 @@
 {% endblock title%}
 {% block content %}
 	<div>
-		<h1>{{ result_book.title }}</h1>
+		<h3>{{ result_book.title }}</h3>
 	</div>
-	<div>
-		<img src="{{ result_book.thumbnail.url }}" width="25%">
-		Hello World
+	<div class="row">
+		<div class="col-xs-6">
+			<img src="{{ result_book.thumbnail.url }}" width="50%">
+		</div>
+		<div class="col-xs-6">
+	      		Description: {{ result_book.description }}
+	    </div>
+		<div class="col-xs-3">
+	        <div class="text-center">
+	          <img src="{{ seller.avatar.url }}" class="avatar img-circle" alt="avatar" width="100px">
+	          <h3>{{ seller.username }}</h3>
+	          <h4>Name : {{ seller.first_name }}</h4>
+	          <h4>Phone Number: {{ seller.phone }}</h4>
+	          <h4>Location : {{ seller.location }}</h4>
+	      	</div>
+	      	<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block">Send Message</button></div>
+		</div>
 	</div>
 	<div>
 		{% if result_book.seller_id == user.id %}
@@ -16,4 +30,41 @@
 			<a href="#">Edit Book</a>
 		{% endif %}
 	</div>
+
+
+	<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+			<h3 class="modal-title" id="lineModalLabel">My Modal</h3>
+		</div>
+		<div class="modal-body">
+			
+            <!-- content goes here -->
+			<form action="mailto:{{ seller.email }}">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Message</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+
+		</div>
+		<div class="modal-footer">
+			<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
+				</div>
+				<div class="btn-group btn-delete hidden" role="group">
+					<button type="button" id="delImage" class="btn btn-default btn-hover-red" data-dismiss="modal"  role="button">Delete</button>
+				</div>
+				<div class="btn-group" role="group">
+					<button type="button" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+  </div>
+</div>
 {% endblock content %}

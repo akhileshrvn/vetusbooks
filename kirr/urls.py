@@ -1,4 +1,6 @@
 
+from django.conf.urls import include
+
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -8,13 +10,15 @@ from django.conf.urls.static import static
 
 from vetusbooks import views
 urlpatterns = [
-	url(r'^upload/$', views.simple_upload),
+    url(r'^$', views.home_view, name='home'),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
 	url(r'^search/$', views.SearchView.as_view(), name='search'),
-	url(r'^register/$', views.register, name='search'),
+    url(r'^login/$', views.LoginView.as_view(), name='login'),
+	url(r'^register/$', views.register, name='register'),
 	url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.HomeView.as_view()),
     url(r'^profile/$', views.user_profile, name='view_profile'),
+    url(r'^seller/(?P<id>\d+)/$', views.seller_profile, name='seller_profile'),
     url(r'^sell_book/$', views.sell_book, name='sell_book'),
     url(r'^user_books/$', views.user_books, name='user_books'),
     url(r'^testing/$', views.testing, name='user_books'),

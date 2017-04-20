@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+	{{ title }}
+{% endblock title %}
+{% block styles %}
+	<link href="{% static 'css/base.css' %}" rel="stylesheet">
+{% block content %}
+<div class="col-sm-12 col-md-6 col-md-offset-3">
+	<form method= "POST" class="form-signin">
+		{% csrf_token %}
+		{% if login_error %}
+		<div class="alert alert-danger alert-dismissable">
+			<a class="panel-close close" data-dismiss="alert">×</a> 
+			<i class="fa fa-coffee"></i>
+			{{ login_error }}
+		</div>
+		{% endif %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <div class="fieldWrapper">
+			<label for="{{ login_form.username.id_for_label }}">User Name</label>
+			{{ login_form.username }}
+			{{ login_form.username.errors }}
+		</div>
+        <div class="fieldWrapper">
+			<label for="{{ login_form.password.id_for_label }}">Password</label>
+			{{ login_form.password }}
+			{{ login_form.password.errors }}
+		</div>
+        <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+</div>
+<div role="separator" class="divider"></diV>
+{% endblock content %}

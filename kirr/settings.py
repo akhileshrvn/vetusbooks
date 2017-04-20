@@ -40,11 +40,10 @@ INSTALLED_APPS = [
 
     #third party
     # 'django_hosts',
+    'social_django',
 
     #custom app
     'vetusbooks',
-    'shortener',
-    'analytics',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'kirr.urls'
@@ -80,6 +81,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -87,6 +91,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kirr.wsgi.application'
 
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
@@ -142,3 +154,23 @@ SHORTCODE_MIN = 6
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+
+LOGIN_URL = 'home'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+
+
+SOCIAL_AUTH_TWITTER_KEY = '7yTXG3UJAwmKVC62zmcOCyoWn'
+SOCIAL_AUTH_TWITTER_SECRET = '97Puq6uVEURGNL7yFH5Vt62Miz3Hru3rDf15BSOmCMnv1PXT1v'
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = '350754345322297'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'a985945acb5bfb3da022f5bb414ea2a6'
+
+# For Gmail
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'vetusbooks.app@gmail.com'
+EMAIL_HOST_PASSWORD = 'rgukt123'
+EMAIL_PORT = 587

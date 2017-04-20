@@ -17,26 +17,12 @@ from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 import os
 
-class HomeView(View):
-
+def home_view(request):
 	context={
 		"title" : "Home",
 		}
-	def get(self, request, *args, **kwargs):
-		context = self.context
-		form = UserLoginForm(request.GET)
-		img_form = ImageUploadForm()
-		context["login_form"] = form
-		context["random_books"] = Book.objects.all().order_by('?')[:8]
-		handleLogin(request, context, form)
-		return render(request,"vetusbooks/home.html",context)
-	def post(self, request, *args, **kwargs):
-		context = self.context
-		form = UserLoginForm(request.POST)
-		context["login_form"] = form
-		context["random_books"] = Book.objects.all().order_by('?')[:8]
-		handleLogin(request, context, form)
-		return render(request,"vetusbooks/home.html",context)
+	context["random_books"] = Book.objects.all().order_by('?')[:8]
+	return render(request,"vetusbooks/home.html",context)
 class LogoutView(View):
 	def get(self, request, *args, **kwargs):
 		logout(request)
@@ -52,14 +38,14 @@ class LoginView(View):
 			form = UserLoginForm()
 			context = {
 				"title" : "Log In!",
-				"form" : form
+				"login_form" : form,
 			}
-		return render(request,'registration/login.html',context)
+		return render(request,'registration/login_2.html',context)
 	def post(self, request, *args, **kwargs):
 		form = UserLoginForm(request.POST)
 		context = {
 			"title" : "Log In!",
-			"form" : form
+			"login_form" : form
 		}
 		if form.is_valid():
 			username = request.POST['username']
@@ -69,8 +55,8 @@ class LoginView(View):
 				login(request,user)
 				return HttpResponseRedirect("/")
 			else:
-				raise forms.ValidationError("You cannot post more than once every x minutes")
-			return HttpResponseRedirect("/")
+				context['login_error'] = "Login Failed!"
+		return render(request, 'registration/login_2.html',context)
 
 class SearchView(View):
 	def get(self, request, *args, **kwargs):
@@ -79,7 +65,6 @@ class SearchView(View):
 			"title": "Search",
 			"login_form" : form
 		}
-		handleLogin(request, context, form)
 		srch_book_name = request.GET.get('srch-book')
 		if srch_book_name is None:
 			return render(request,"vetusbooks/home.html",context)
@@ -152,6 +137,20 @@ def user_profile(request):
 	context["profile_form"] = profile_form
 	return render(request, 'registration/user_profile.html', context)
 
+def seller_profile(request, id):
+	print(id)
+	user = User.objects.filter(id=id)
+	print(user)
+	if user:
+		user = user[0]
+	else:
+		HttpResponseRedirect("/")
+	context = {
+			"title": user.username,
+			"user" : user
+	}
+	return render(request, 'vetusbooks/seller_profile.html', context)
+
 def user_books(request):
 	if(not request.user.is_authenticated()):
 		return HttpResponseRedirect("/")
@@ -196,6 +195,7 @@ def show_book(request, book_id):
 		"title":result_book.title,
 		"result_book": result_book,
 		"user" : request.user,
+		"seller" : User.objects.filter(id=result_book.seller_id)[0]
 	}
 	print(result_book)
 	return render(request, 'vetusbooks/show_book.html',context)

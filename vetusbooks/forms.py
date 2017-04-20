@@ -6,12 +6,28 @@ from django.core.files.storage import FileSystemStorage
 from vetusbooks.models import User, Book
 
 class UserLoginForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+            'class': 'form-control'
+            })
     username = forms.CharField(max_length=50, required=True,
     	widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Username'})
     	)
     password = forms.CharField(required=True,
     	widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password'})
     	)
+
+    def clean_username(self):
+        uname = self.cleaned_data['username']
+        if not User.objects.filter(username=uname) :
+            raise forms.ValidationError("Invalid Username")
+        return uname
+    # def clean_password(self):
+    #     uname = self.cleaned_data['username']
+    #     pwd = self.cleaned_data['username']
+    #     if User.objects.filter(username=uname).pass
 
 class RegistrationForm(UserCreationForm):
 
@@ -67,8 +83,8 @@ class UserProfileForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-
-        if email and User.objects.filter(email=email).exclude(username=username).count():
+        uname = self.cleaned_data.get('username')
+        if email and User.objects.filter(email=email).exclude(username=uname).count():
             raise forms.ValidationError('This email address is already in use. Please supply a different email address.')
         return email
 
