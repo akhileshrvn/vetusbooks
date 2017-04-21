@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+		.hr {
+			-moz-border-bottom-colors: none;
+			-moz-border-image: none;
+			-moz-border-left-colors: none;
+			-moz-border-right-colors: none;
+			-moz-border-top-colors: none;
+			border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+			border-style: solid none;
+			border-width: 1px 0;
+			margin: 18px 0;
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<center>
+			<h3>VetusBooks</h3>
+			Respond to <a href="{{ sender_profile }}">{{ msg_sender.username }}</a> by simply replying to his/her email.
+		</center>
+		<hr>
+		<div class="col-md-3">
+        <div class="text-center">
+          <!-- <img src="{{ sender_avatar }}" class="avatar img-circle" alt="{{ sender_avatar }}" width="80px"> -->
+          <!-- <a href="{{ sender_profile }}">{{ msg_sender.username }}</a> -->
+          <!-- <h3>{{ msg_sender.username }}</h3> -->
+          <a href="{{ sender_profile }}"><h3>{{ msg_sender.username }}</h3></a>
+        </div>
+    	</div>
+		<i>{{ user_message }}</i>
+		<div>
+			<i>Mail: {{ msg_sender.email }}</i>
+		</div>
+</div>
+<hr>
+</div>
+</body>
+</html>

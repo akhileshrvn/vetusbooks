@@ -21,9 +21,10 @@ urlpatterns = [
     url(r'^seller/(?P<id>\d+)/$', views.seller_profile, name='seller_profile'),
     url(r'^sell_book/$', views.sell_book, name='sell_book'),
     url(r'^user_books/$', views.user_books, name='user_books'),
-    url(r'^testing/$', views.testing, name='user_books'),
+    url(r'^testing/$', views.testing, name='testing'),
     url(r'^book/(?P<book_id>\d+)/$', views.show_book, name='show_book'),
     url(r'^remove_book/(?P<book_id>\d+)/$', views.remove_book, name='remove_book'),
+    url(r'^send_message/(?P<book_id>\d+)/(?P<sender_id>\d+)/(?P<book_owner_id>\d+)/$', views.send_message, name='send_message'),
     # url(r'^(?P<shortcode>[\w-]+)/$', URLRedirectView.as_view(), name='scode'),
 ]
 

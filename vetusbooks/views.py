@@ -15,6 +15,9 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context
+from django.core.mail import EmailMessage
 import os
 
 def home_view(request):
@@ -184,7 +187,7 @@ def sell_book(request):
 	return render(request, 'vetusbooks/sell_book.html', context)
 
 def testing(request):
-	return render(request, 'testing.html', {})
+	return render(request, 'vetusbooks/email.html', {})
 
 def show_book(request, book_id):
 	result_book = Book.objects.filter(id=book_id)
@@ -217,5 +220,41 @@ def remove_book(request, book_id):
 		context["alert_message"] = book.title + " Deleted Successfully!"
 		context["user_books"] = getUserBooks(request.user)
 		return render(request, "vetusbooks/user_books.html", context)
+	else:
+		return HttpResponseRedirect("/")
+
+def send_message(request, book_id, sender_id, book_owner_id):
+	book = Book.objects.filter(id=book_id)
+	sender = User.objects.filter(id=sender_id)
+	book_owner = User.objects.filter(id=book_owner_id)
+	if request.method == 'POST' and book and sender and book_owner and request.user.is_authenticated:
+		book = book[0]
+		sender = sender[0]
+		book_owner = book_owner[0]
+		user_message = request.POST.get('message')
+		# message_text =  sender.firstname + " asking something about your book " + book.title
+		# message_text += "\n" + user_message
+		context = {
+			"title":book.title,
+			"result_book": book,
+			"user" : request.user,
+			"seller" : User.objects.filter(id=book.seller_id)[0],
+			"alert_message" : "Message Sent Successfully!"
+		}
+		msg = EmailMessage(book_owner.username +" | " + book.title,
+		get_template('vetusbooks/email.html').render(
+			Context({
+				'msg_sender': sender,
+				'user_message': user_message,
+				'sender_avatar' : "http://localhost:8000"+sender.avatar.url,
+				'sender_profile' : "http://localhost:8000/seller/"+str(sender.id)+"/"
+				})
+			),
+		'vetusbooks.app@gmail.com',
+		 [book_owner.email])
+		msg.content_subtype = "html"
+		msg.send()
+		return render(request, "vetusbooks/show_book.html", context)
+		# return HttpResponseRedirect(request.META.get('HTTP_REFERER'),{'alert_message':"Message Sent Successfully!"})
 	else:
 		return HttpResponseRedirect("/")
