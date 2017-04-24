@@ -109,10 +109,13 @@ def register(request):
 			username = register_form.cleaned_data['username']
 			password = register_form.cleaned_data['password1']
 			password2 = register_form.cleaned_data['password2']
-
 			user = authenticate(username=username, password=password)
 			login(request, user)
-			return HttpResponseRedirect("/")
+			context = {
+				"title" : "Profile",
+				"alert_message" : "Hurray! Registered Successfully",
+			}
+			return HttpResponseRedirect("/user_books")
 	else:
 		register_form = RegistrationForm()
 	context["register_form"] = register_form
@@ -167,7 +170,7 @@ def user_books(request):
 
 def sell_book(request):
 	context = {
-		"title": "Sell a Book!",
+		"title": "Sell Book!",
 	}
 	if(not request.user.is_authenticated):
 		return HttpResponseRedirect("/")
@@ -187,7 +190,8 @@ def sell_book(request):
 	return render(request, 'vetusbooks/sell_book.html', context)
 
 def testing(request):
-	return render(request, 'vetusbooks/email.html', {})
+	b = Book.objects.all()
+	return render(request, 'testing.html', {'books':b})
 
 def show_book(request, book_id):
 	result_book = Book.objects.filter(id=book_id)

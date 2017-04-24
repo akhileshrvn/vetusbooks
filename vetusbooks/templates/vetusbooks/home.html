@@ -17,25 +17,32 @@
 		<h1>You are not logged In!</h1>
 	{% endif %}
 	{% for book in random_books %}
-		{% if forloop.counter0|percent_four == 3 %}
-			<div class="row">
-		{% endif %}
-			<div class="col-sm-3 col-lg-3 col-md-3">
-				<div class="thumbnail">
-					{% if book.thumbnail.name is None %}
-						<img class = "book_thumb" src="{{MEDIA_ROOT}}/media/photos/no_thumb.jpg" alt="Card image cap">
-					{% else %}
-				  		<img class="book_thumb" src="{{MEDIA_ROOT}}{{book.thumbnail.url}}" alt="Card image cap">
-				  	{% endif %}
-				  	<div class="caption">
-				  		<h4><a href="/book/{{book.id}}">{{ book.title }}</a></h4>
-				  		<h4>${{ book.price }}</h4>
-				    	<p class="card-text">{{ book.description }}</p>
-					</div>
+		{% if forloop.counter0|percent_six == 5 %}
+        	<div class="row" id="product-row">
+       	{% endif %}
+			<div class="col-sm-2 min-gutter">
+                <div class="oneitem">
+				    <div class="thumbnail">
+				    {% if book.thumbnail.name is None %}
+				      	<img src="{{MEDIA_ROOT}}/media/photos/no_thumb.jpg" alt="...">
+				    {% else %}
+						<img src="{{MEDIA_ROOT}}{{book.thumbnail.url}}" alt="...">
+				    {% endif %}
+				      <div class="caption">
+				        <h3 class="thumbnailheading">
+				        	<a href="/book/{{book.id}}">{{ book.title }}</a>
+				        </h3>
+				        <p>{{ book.description }}</p>
+				        </div>
+						<a href="/book/{{ book.id }}" class="btn btn-primary btn-block price-button">${{ book.price }}</a>
+				       <!-- <button type="button" class="btn btn-primary btn-block">asdf
+				       	<a class="price-font" href="/book/{{ book.id }}">{{ book.price }}</a>
+				       </button > -->
+				    </div>
 				</div>
-			</div>
-		{% if forloop.counter0|percent_four == 3 %}
-		</div>
-		{% endif %}
-		{% endfor %}
+            </div>
+        {% if forloop.counter0|percent_six == 5 %}
+        	</div>
+        {% endif %}
+        {% endfor %}
 {% endblock content %}

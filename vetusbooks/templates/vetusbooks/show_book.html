@@ -10,35 +10,46 @@
 		{{ alert_message }}
 		</div>
 	{% endif %}
-	<div>
+	<div class="container">
+	
+
+	<div class="row">
+		<div class="col-xs-5 text-center">
+			<div>
 		<h3>{{ result_book.title }} <i>for </i> ${{ result_book.price }}</h3>
 	</div>
-	<div class="row">
-		<div class="col-xs-6">
-			<img src="{{ result_book.thumbnail.url }}" width="50%">
+			<img src="{{ result_book.thumbnail.url }}" width="70%">
+			<div>
+		{% if result_book.seller_id == user.id %}
+			<a href="/remove_book/{{ result_book.id }}" class="btn btn-sm btn-primary">Remove Book</a>
+			<!-- <a href="/remove_book/{{ result_book.id }}">Remove Book</a> -->
+		{% endif %}
+	</div>
 		</div>
-		<div class="col-xs-6">
-	      		Description: {{ result_book.description }}
-	    </div>
-		<div class="col-xs-3">
-	        <div class="text-center">
+		<div class="col-xs-7 text-left">
+	        <div class="text-left user_prof">
+	        <div class="row">
+	        	<div class="col-md-3 text-center">
 	          <img src="{{ seller.avatar.url }}" class="avatar img-circle" alt="avatar" width="100px">
-	          <h3>{{ seller.username }}</h3>
+	          <a href="/seller/{{ seller.id }}"><h3>{{ seller.username }}</h3></a>
+	      		</div>
+	      	<div class="col-md-9">
 	          <h4>Name : {{ seller.first_name }}</h4>
 	          <h4>Phone Number: {{ seller.phone }}</h4>
 	          <h4>Location : {{ seller.location }}</h4>
-	      </div>
-	      	{% if user.is_authenticated and result_book.seller_id != user.id %}
-	      	<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block">Send Message</button></div>
+	          {% if user.is_authenticated and result_book.seller_id != user.id %}
+	      		<button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary">Send Message</button>
 	      	{% endif %}
+	      </div>
+	      </div>
+	      </div>
+	      	<p class="bookdisc">
+	      		Description: {{ result_book.description }}
+	      	</p>
 		</div>
 	</div>
-	<div>
-		{% if result_book.seller_id == user.id %}
-			<a href="/remove_book/{{ result_book.id }}">Remove Book</a> <a>|</a>
-			<a href="#">Edit Book</a>
-		{% endif %}
-	</div>
+</div>
+	
 
 	<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog">

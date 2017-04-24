@@ -35,13 +35,27 @@ class RegistrationForm(UserCreationForm):
         model = User
         fields = {'username', 'password1', 'password2', 'email', 
                 'phone', 'first_name', 'last_name', 'birth_date', 'location', 'avatar'}
+        widgets = {
+            'username' : forms.TextInput(attrs = {'placeholder': 'Username'}),
+            'password1'    : forms.TextInput(attrs = {'placeholder': 'Password'}),
+            'password2'    : forms.TextInput(attrs = {'placeholder': 'Password'}),
+            'email'    : forms.TextInput(attrs = {'placeholder': 'Email'}),
+            'phone'    : forms.TextInput(attrs = {'placeholder': 'Phone Number'}),
+            'first_name'    : forms.TextInput(attrs = {'placeholder': 'First Name'}),
+            'last_name'    : forms.TextInput(attrs = {'placeholder': 'Last Name'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
-            self.fields[field].widget.attrs.update({
-            'class': 'form-control'
+            if(field in ['first_name','last_name']):
+                self.fields[field].widget.attrs.update({
+            'class': 'form-control form-ctrl'
             })
+            else:
+                self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+                })
     def save(self, commit=True):
         new_user = super(RegistrationForm, self).save(commit=False)
         new_user.email = self.cleaned_data['email']
@@ -54,12 +68,24 @@ class RegistrationForm(UserCreationForm):
             new_user.save()
         return new_user
 
+    # def clean(self):
+    #     password1 = self.cleaned_data['password1']
+    #     password2 = self.cleaned_data['password2']
+    #     if password1 and password2 and password1 != password2:
+    #         raise forms.ValidationError("Both Passwords Should Match")
+    #     return password2
     def clean_username(self):
         uname = self.cleaned_data['username']
         if len(uname) < 5 :
             raise forms.ValidationError("Length of Username must be greater than 5")
         return uname
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        for user in User.objects.all():
+            if user.email == email:
+                raise forms.ValidationError("User with this Email already exists.")
+        return email
 class UserProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

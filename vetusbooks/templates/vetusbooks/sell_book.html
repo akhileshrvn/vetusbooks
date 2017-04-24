@@ -4,7 +4,7 @@
 {% endblock title %}
 {% block content %}
 <!-- 'title', 'author', 'price', 'thumbnail','description', -->
-	<h2>Here You can sell a book</h2>
+	<h2>Book Details:</h2>
 	<form method="POST" class="form-horizontal" enctype="multipart/form-data" role="form">{% csrf_token %}
           <div class="fieldWrapper form-group">
             <label class="col-lg-3 control-label" for="{{ book_form.username.id_for_label }}">Title:</label>
@@ -62,9 +62,7 @@
           <div class="form-group">
             <label class="col-md-3 control-label"></label>
             <div class="col-md-8">
-              <input type="Submit" class="btn btn-primary" value="Save Changes">
-              <span></span>
-              <input type="button" class="btn btn-default" value="Cancel">
+              <input type="Submit" class="btn btn-primary" value="Add Book">
             </div>
           </div>
         </form>

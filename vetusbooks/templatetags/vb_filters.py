@@ -9,3 +9,7 @@ def percentFour(value):
 @register.filter(name='list_length')
 def percentFour(value):
     return len(value)
+
+@register.filter(name='percent_six')
+def percentFour(value):
+    return value%6

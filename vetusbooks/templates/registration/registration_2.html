@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block content%}
+{{ register_form.non_field_errors }}
+<div class="col-sm-12 col-md-6 col-md-offset-3">
+<h1>Registration</h1>
+<form method="POST" enctype = "multipart/form-data" id="regForm" class="form-horizontal">{% csrf_token %}
+<div class="fieldWrapper">
+    <label for="{{ register_form.first_name.id_for_label }}">First Name</label>
+    {{ register_form.first_name }}
+    {{ register_form.first_name.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.last_name.id_for_label }}">Last Name</label>
+    {{ register_form.last_name }}
+    {{ register_form.last_name.errors }}
+</div>
+<div class="fieldWrapper">
+	<label for="{{ register_form.username.id_for_label }}">Username:</label>
+    	{{ register_form.username }}
+        <div class="sample">
+    	{{ register_form.username.errors }}
+        </div>
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.password1.id_for_label }}">Password:</label>
+    {{ register_form.password1 }}
+    {{ register_form.password1.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.password2.id_for_label }}">Confirm Password:</label>
+    {{ register_form.password2 }}
+    {{ register_form.password2.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.email.id_for_label }}">Email</label>
+    {{ register_form.email }}
+    {{ register_form.email.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.phone.id_for_label }}">Phone</label>
+    {{ register_form.phone }}
+    {{ register_form.phone.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.location.id_for_label }}">Location</label>
+    {{ register_form.location }}
+    {{ register_form.location.errors }}
+</div>
+<div class="fieldWrapper">
+    <label for="{{ register_form.avatar.id_for_label }}">Profile Pic</label>
+    {{ register_form.avatar }}
+    {{ register_form.avatar.errors }}
+</div>
+<input type="Submit" value="Sign Up!"/>
+</form>
+</div>
+{% endblock content%}

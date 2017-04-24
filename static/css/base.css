@@ -1,3 +1,13 @@
+.btn-primary {
+    color: #fff;
+    background-color: #056d6e;
+    border-color: #056d6e;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #077879;
+    border-color: #056d6e;
+}
 hr {
   -moz-border-bottom-colors: none;
   -moz-border-image: none;
@@ -16,27 +26,18 @@ hr {
 	padding:0px 15px;
 }
 
-.thumbnail {
-    float:left;
-    width:250px;
-    height:300px;
-    text-align:center;
-}
 
-.thumbnail img
-{
-    max-height: 150px;
-    max-width: 100%;
-}
+
 
 @media (min-width: 768px) {
-    .omb_row-sm-offset-3 div:first-child[class*="col-"] {
-        margin-left: 25%;
+    .omb_row-sm-offset-4 div:first-child[class*="col-"] {
+        margin-left: 33%;
+        text-align: center;
     }
 }
 
 .omb_login .omb_authTitle {
-    text-align: center;
+  text-align: center;
 	line-height: 300%;
 }
 	
@@ -84,4 +85,46 @@ hr {
 }
 .omb_login .omb_loginForm  .help-block {
     color: red;
+}
+.oneitem .thumbnail img{
+	height:300px !important;
+}
+.oneitem .thumbnail h3 a{
+	position: absolute;
+    width: 75%;
+    white-space: nowrap;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.oneitem .thumbnail p {
+    margin: 40px 0px 0px;
+    position: absolute;
+    width: 75%;
+    white-space: nowrap;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.price-button{
+	margin: 60px 0px 0px;
+}
+.price-font {
+  color: white !important;
+}
+p.bookdisc{
+  margin: 60px 0px 0px !important;
+}
+.user_prof{
+  margin: 60px 0px 0px !important;
+}
+
+.input-group .form-ctrl {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 98%;
+    margin-bottom: 0;
 }
