@@ -5,7 +5,11 @@
 {% endblock title %}
 {% block content %}
 	<div class="row">
-		<h2>{{ search_result|length }} Books Found:</h2>
+		{% if search_result|length == 1 %}
+			<h2>{{ search_result|length }} Book Found:</h2>
+		{% else %}
+			<h2>{{ search_result|length }} Book Found:</h2>
+		{% endif %}
 	</div>
 		{% for book in search_result %}
 		{% if forloop.counter0|percent_six == 5 %}

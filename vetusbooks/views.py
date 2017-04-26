@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 from django import forms
 from django.views import View
@@ -18,13 +17,17 @@ from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template import Context
 from django.core.mail import EmailMessage
+from django.db.models import Q
 import os
 
 def home_view(request):
 	context={
 		"title" : "Home",
 		}
-	context["random_books"] = Book.objects.all().order_by('?')[:8]
+	if(request.user.is_authenticated):
+		context["random_books"] = Book.objects.all().filter(~Q(seller_id = request.user.id)).order_by('?')[:8]
+	else:
+		 context["random_books"] = Book.objects.all().order_by('?')[:8]
 	return render(request,"vetusbooks/home.html",context)
 class LogoutView(View):
 	def get(self, request, *args, **kwargs):
@@ -105,7 +108,6 @@ def register(request):
 		register_form = RegistrationForm(request.POST, request.FILES)
 		if register_form.is_valid():
 			new_user = register_form.save()
-			print("USER AVATAR", new_user.avatar)
 			username = register_form.cleaned_data['username']
 			password = register_form.cleaned_data['password1']
 			password2 = register_form.cleaned_data['password2']
@@ -130,23 +132,17 @@ def user_profile(request):
 	if request.method == "POST":
 		profile_form = UserProfileForm(request.POST, request.FILES, instance = request.user)
 		if profile_form.is_valid():
-			print("Avatar" , profile_form.cleaned_data['avatar'])
 			new_user = profile_form.save()
-			print("Avatar 2", new_user.avatar)
 			context["alert_message"] = "Profile Updated Successfully!"
 			context["profile_form"] = profile_form
-			print("context updated")
 			return render(request, "registration/user_profile.html", context)
 	else:
-		print("Not Valid")
 		profile_form = UserProfileForm(instance=request.user)
 	context["profile_form"] = profile_form
 	return render(request, 'registration/user_profile.html', context)
 
 def seller_profile(request, id):
-	print(id)
 	user = User.objects.filter(id=id)
-	print(user)
 	if user:
 		user = user[0]
 	else:
@@ -180,7 +176,6 @@ def sell_book(request):
 			new_book = book_form.save()
 			new_book.seller_id = request.user.id
 			new_book.save()
-			print("Book Saved Successfully")
 			context['alert_message'] = new_book.title + " Added Successfully!"
 			context['user_books'] = getUserBooks(request.user)
 			return render(request, 'vetusbooks/user_books.html', context)
@@ -204,7 +199,6 @@ def show_book(request, book_id):
 		"user" : request.user,
 		"seller" : User.objects.filter(id=result_book.seller_id)[0]
 	}
-	print(result_book)
 	return render(request, 'vetusbooks/show_book.html',context)
 
 def remove_book(request, book_id):

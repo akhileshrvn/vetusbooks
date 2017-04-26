@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #third party
-    # 'django_hosts',
+    'django_hosts',
     'social_django',
 
     #custom app
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,8 +63,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'kirr.urls'
 ROOT_HOSTCONF = 'kirr.hosts'
 DEFAULT_HOST = 'www'
-DEFAULT_REDIRECT_URL = 'http://www.tirr.com:8000'
-PARENT_HOST = "tirr.com:8000"
+DEFAULT_REDIRECT_URL = 'http://www.vetusbooks.com:8000'
+PARENT_HOST = "vetusbooks.com:8000"
 
 AUTH_USER_MODEL = 'vetusbooks.User'
 

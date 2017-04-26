@@ -16,8 +16,8 @@
 		{% if not user_books %}
 			<h2>No Books Dude!</h2> Wanna <a href="/sell_book">Sell Book?</a>
 		{% else %}
-		{% for book in user_books %}
 			<h2>Here are Your Books:</h2>
+		{% for book in user_books %}
 		{% if forloop.counter0|percent_six == 5 %}
         	<div class="row" id="product-row">
        	{% endif %}
