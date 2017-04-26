@@ -45,7 +45,7 @@ To Make a user SuperUser:
 	user.save()
 
 Models : 
-	User(AbstractUser):
+	User:
 		- username
 		- password
 		- emial
