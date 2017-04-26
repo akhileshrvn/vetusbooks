@@ -35,7 +35,7 @@ Important Commands:
 
 To Make a user SuperUser:
 
-1. Go to shell using above third command
+1. Go to shell using above command #3:
 
 	from vetusbook.models import User
 	user = User.objects.get(username="your user name goes here")
