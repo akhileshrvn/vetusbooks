@@ -44,7 +44,8 @@ To Make a user SuperUser:
 	user.is_superuser = True
 	user.save()
 
-Models : 
+Models :
+
 	User:
 		- username
 		- password
