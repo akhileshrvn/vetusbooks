@@ -4,10 +4,13 @@
 Description : A place where you can merchandise old books.
 
 
-Softwares Needed : 
+Softwares Needed :
+
 	1. install "virtualenv" (used version 15.1.0)
 	2. install "python3.4.0"
+
 Environment Setup:
+
 	1. create virtual environment with python3.4 with below command
 		 
 		 $ virtualenv -p python3.4 envname
@@ -35,7 +38,7 @@ Important Commands:
 
 To Make a user SuperUser:
 
-1. Go to shell using above command #3:
+Go to shell using above command #3:
 
 	from vetusbook.models import User
 	user = User.objects.get(username="your user name goes here")
