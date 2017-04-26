@@ -15,7 +15,7 @@ Environment Setup:
 		 
 		 $ virtualenv -p python3.4 envname
 
-		 in above command python3 is exact location of your installed python3.4
+		 in above command python3.4 is exact location of your installed  python3.4
 
 	2. all packages from requirements.txt using pip
 
