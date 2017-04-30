@@ -18,6 +18,11 @@ from django.template.loader import get_template
 from django.template import Context
 from django.core.mail import EmailMessage
 from django.db.models import Q
+
+# for paypal
+from django.core.urlresolvers import reverse
+from paypal.standard.forms import PayPalPaymentsForm
+
 import os
 
 def home_view(request):
@@ -25,9 +30,9 @@ def home_view(request):
 		"title" : "Home",
 		}
 	if(request.user.is_authenticated):
-		context["random_books"] = Book.objects.all().filter(~Q(seller_id = request.user.id)).order_by('?')[:8]
+		context["random_books"] = Book.objects.all().filter(~Q(seller_id = request.user.id)).order_by('?')[:12]
 	else:
-		 context["random_books"] = Book.objects.all().order_by('?')[:8]
+		 context["random_books"] = Book.objects.all().order_by('?')[:12]
 	return render(request,"vetusbooks/home.html",context)
 class LogoutView(View):
 	def get(self, request, *args, **kwargs):
@@ -185,19 +190,43 @@ def sell_book(request):
 	return render(request, 'vetusbooks/sell_book.html', context)
 
 def testing(request):
-	b = Book.objects.all()
-	return render(request, 'testing.html', {'books':b})
+	
+	paypal_dict = {
+        "business": "receiver_email@example.com",
+        "amount": "10000000.00",
+        "item_name": "name of the item",
+        "invoice": "unique-invoice-id",
+        "notify_url": "https://www.example.com" + reverse('paypal-ipn'),
+        "return_url": "/",
+        "cancel_return": "/",
+        "custom": "Upgrade all users!",  # Custom command to correlate to some function later (optional)
+    }
+	form = PayPalPaymentsForm(initial=paypal_dict)
+	context = {"form": form}
+	return render(request, 'payment.html', context)
 
 def show_book(request, book_id):
 	result_book = Book.objects.filter(id=book_id)
 	if not result_book:
 		return HttpResponseRedirect("/")
 	result_book = result_book[0]
+	paypal_dict = {
+        "business": "vetusbooks.app@gmail.com",
+        "amount": result_book.price,
+        "item_name": result_book.title,
+        "invoice": "unique-invoice-id",
+        "notify_url": "http://localhost:8000/paypal/" + reverse('paypal-ipn'),
+        "return_url": "http://localhost:8000/book/"+str(result_book.id),
+        "cancel_return": "http://localhost:8000/book/"+str(result_book.id),
+        "custom": "Upgrade all users!",  # Custom command to correlate to some function later (optional)
+    }
+	payment_form = PayPalPaymentsForm(initial=paypal_dict)
 	context = {
 		"title":result_book.title,
 		"result_book": result_book,
 		"user" : request.user,
-		"seller" : User.objects.filter(id=result_book.seller_id)[0]
+		"seller" : User.objects.filter(id=result_book.seller_id)[0],
+		"payment_form" : payment_form
 	}
 	return render(request, 'vetusbooks/show_book.html',context)
 
@@ -256,3 +285,9 @@ def send_message(request, book_id, sender_id, book_owner_id):
 		# return HttpResponseRedirect(request.META.get('HTTP_REFERER'),{'alert_message':"Message Sent Successfully!"})
 	else:
 		return HttpResponseRedirect("/")
+
+def about(request):
+	return render(request, "vetusbooks/about_us.html",{"title":"About Us"})
+
+def contact(request):
+	return render(request, "vetusbooks/contact.html",{"title":"Contact Us"})

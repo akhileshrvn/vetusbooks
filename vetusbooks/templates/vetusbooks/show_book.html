@@ -48,6 +48,15 @@
 	      		Description: {{ result_book.description }}
 	      	</p>
 		</div>
+		{% if request.user.is_authenticated %}
+		<div>
+			{{ payment_form.render }}
+		</div>
+		{% else %}
+			<div>
+			   Please <a href="/login">Login</a> to buy!
+		</div>
+		{% endif %}
 	</div>
 </div>
 	

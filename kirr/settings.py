@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #third party
     'django_hosts',
     'social_django',
+    'paypal.standard.ipn',
 
     #custom app
     'vetusbooks',
@@ -167,8 +168,8 @@ SOCIAL_AUTH_TWITTER_KEY = '7yTXG3UJAwmKVC62zmcOCyoWn'
 SOCIAL_AUTH_TWITTER_SECRET = '97Puq6uVEURGNL7yFH5Vt62Miz3Hru3rDf15BSOmCMnv1PXT1v'
 
 
-SOCIAL_AUTH_FACEBOOK_KEY = '350754345322297'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = 'a985945acb5bfb3da022f5bb414ea2a6'
+SOCIAL_AUTH_FACEBOOK_KEY = '180166302505262'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'b9233e989888e3c9013051ed9962a3bb'
 
 # For Gmail
 EMAIL_USE_TLS = True
