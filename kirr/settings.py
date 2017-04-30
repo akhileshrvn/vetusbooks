@@ -177,3 +177,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'vetusbooks.app@gmail.com'
 EMAIL_HOST_PASSWORD = 'rgukt123'
 EMAIL_PORT = 587
+
+#PayPal
+# paypalrestsdk.configure({
+#   'mode': 'sandbox', #sandbox or live
+#   'client_id': 'AUxNLRSVpguFG2jBM17SVeu8UbqHliLJPp8dzMMtBrZAoN0POiVAHpIq3eMlYAMPHcqxZggMYDitxIQh',
+#   'client_secret': 'ELDRisjszuMJ5S2VcoqdMvKABtXvoENSc2U4f-WRJ1AkqcCgKS89HvuXbPXox8HQfO0icXzqcMBhqun4' })
